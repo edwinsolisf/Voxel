@@ -12,7 +12,7 @@ public:
 	//void OnUpdate();
 	void GenChunkAt(const stm::vec3i& pos);
 	const auto& GetChunks() const { return _worldData; }
-
+	void WorldGenerator(const stm::vec3i& pos);
 private:
 	std::vector<Chunk> _worldData;
 	//std::vector<Entity> _entityData;

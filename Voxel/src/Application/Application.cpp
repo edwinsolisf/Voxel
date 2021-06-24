@@ -20,6 +20,11 @@ void Application::Init()
 {
 	Log::Init();
 	
+	std::shared_ptr<Shader> shader = std::make_shared<Shader>();
+	shader->AttachShader("assets/shaders/basic_vertex_shader.shader");
+	shader->AttachShader("assets/shaders/basic_fragment_shader.shader");
+	renderer.BindShader(shader);
+
 	/*this->renderer.Push(Mesh({
 		Vertex({-0.5f, -0.5f, 1.0f }, { 0.0f, 0.0f}),
 		Vertex({-0.5f,  0.5f, 1.0f }, { 0.0f, 1.0f}),
@@ -45,9 +50,7 @@ void Application::Run()
 	const auto& view = global_player.GetCamera().CurrentView();
 	const auto& proj = global_player.GetCamera().CurrentProjection();
 
-	Shader shader;
-	shader.AttachShader("assets/shaders/basic_vertex_shader.shader");
-	shader.AttachShader("assets/shaders/basic_fragment_shader.shader");
+	auto& shader = *renderer.GetBoundShader();
 
 	_window->Clear();
 
@@ -68,6 +71,7 @@ void Application::Run()
 		renderer.Draw();
 	}*/
 	shader.SetUniformMat4f("u_model", model);
+
 	renderer.RenderWorld(world);
 	
 	

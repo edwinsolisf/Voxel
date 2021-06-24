@@ -2,6 +2,7 @@
 
 #include "OpenGLWindow.h"
 #include "OpenGLCallback.h"
+#include "stb/stb_image.h"
 
 OpenGLWindow::OpenGLWindow(uint32_t width, uint32_t height, const char* title)
 	:_width(width), _height(height), _title(title)
@@ -25,9 +26,17 @@ OpenGLWindow::OpenGLWindow(uint32_t width, uint32_t height, const char* title)
 		throw;
 	}
 
-	LOG_INFO(glfwGetVersionString());
+	LOG_INFO("GLFW " + std::string(glfwGetVersionString()));
+	LOG_INFO("OpenGL " + std::string((char*)glGetString(GL_VERSION)));
+	LOG_INFO((char*)glGetString(GL_VENDOR));
+	LOG_INFO((char*)glGetString(GL_RENDERER));
+
 	glViewport(0, 0, _width, _height); 
 
+	GLFWimage icon;
+	icon.pixels = stbi_load("assets/images/icon.png", &icon.width, &icon.height, nullptr, 4);
+	glfwSetWindowIcon(_window, 1, &icon);
+	stbi_image_free(icon.pixels);
 
 	glfwSetKeyCallback(_window, key_callback);
 	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -48,8 +57,8 @@ void OpenGLWindow::ProcessEvents() const
 
 void OpenGLWindow::Clear() const
 {
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_FRONT);
+	GLCALL(glEnable(GL_CULL_FACE));
+	GLCALL(glCullFace(GL_FRONT));
 	GLCALL(glEnable(GL_DEPTH_TEST));
 	GLCALL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	GLCALL(glClearColor(0.3f, 0.4f, 0.8f, 1.0f));

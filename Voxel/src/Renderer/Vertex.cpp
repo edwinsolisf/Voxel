@@ -9,6 +9,7 @@ VertexBufferLayout Vertex::GetLayout()
 	{
 		layout.Push<GLfloat>(3);
 		layout.Push<GLfloat>(2);
+		layout.Push<GLfloat>(1);
 		init = true;
 	}
 

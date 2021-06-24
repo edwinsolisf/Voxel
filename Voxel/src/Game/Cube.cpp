@@ -9,40 +9,40 @@ std::vector<Vertex> CubeMesh::GenVertices()
 		//Vertices arranged from bottom-left clockwise
 
 		//FRONT
-		Vertex({ -0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f }),
-		Vertex({ -0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f }),
-		Vertex({  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f }),
-		Vertex({  0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f }),
-
-		//RIGHT
-		Vertex({  0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f }),
-		Vertex({  0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f }),
-		Vertex({  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f }),
-		Vertex({  0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f }),
-
-		//BACK
-		Vertex({  0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f }),
-		Vertex({  0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f }),
-		Vertex({ -0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f }),
-		Vertex({ -0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f }),
-
-		//LEFT
-		Vertex({ -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f }),
-		Vertex({ -0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f }),
-		Vertex({ -0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f }),
-		Vertex({ -0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f }),
+		Vertex({ -0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f }, 0),
+		Vertex({ -0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f }, 0),
+		Vertex({  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f }, 0),
+		Vertex({  0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f }, 0),
+													  
+		//RIGHT										  
+		Vertex({  0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f }, 0),
+		Vertex({  0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f }, 0),
+		Vertex({  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f }, 0),
+		Vertex({  0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f }, 0),
+													  
+		//BACK										  
+		Vertex({  0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f }, 0),
+		Vertex({  0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f }, 0),
+		Vertex({ -0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f }, 0),
+		Vertex({ -0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f }, 0),
+													 
+		//LEFT										 
+		Vertex({ -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f }, 0),
+		Vertex({ -0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f }, 0),
+		Vertex({ -0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f }, 0),
+		Vertex({ -0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f }, 0),
 
 		//TOP
-		Vertex({ -0.5f,  0.5f,  0.5f }, { 0.0f, 0.0f }),
-		Vertex({ -0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f }),
-		Vertex({  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f }),
-		Vertex({  0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f }),
-
-		//BOTTOM
-		Vertex({ -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f }),
-		Vertex({ -0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f }),
-		Vertex({  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f }),
-		Vertex({  0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f }),
+		Vertex({ -0.5f,  0.5f,  0.5f }, { 0.0f, 0.0f }, 0),
+		Vertex({ -0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f }, 0),
+		Vertex({  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f }, 0),
+		Vertex({  0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f }, 0),
+													  
+		//BOTTOM									  
+		Vertex({ -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f }, 0),
+		Vertex({ -0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f }, 0),
+		Vertex({  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f }, 0),
+		Vertex({  0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f }, 0)
 	};
 	return vertices;
 }

@@ -1,6 +1,7 @@
 #include "Renderer.h"
 
 Renderer::Renderer()
+	:_boundShader(nullptr)
 {
 }
 
@@ -13,6 +14,7 @@ void Renderer::Draw() const
 		{
 			const auto& texture = mesh.GetTextures()[i];
 			texture->Bind(i);
+			_boundShader->SetUniform1i("u_texture_" + std::to_string(i + 1), i);
 		}
 		OpenGLDraw(mesh.GetVertexCount());
 	}

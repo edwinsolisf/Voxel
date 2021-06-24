@@ -12,7 +12,10 @@ public:
 	void Push(const Mesh& mesh) { _queue.push_back(mesh); }
 	void Clear() { _queue.clear(); }
 	void Draw() const;
+	void BindShader(std::shared_ptr<Shader> shader) { _boundShader = shader; }
+	auto GetBoundShader() const { return _boundShader; }
 
 private:
 	std::vector<Mesh> _queue;
+	std::shared_ptr<Shader> _boundShader;
 };

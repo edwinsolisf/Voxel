@@ -15,44 +15,44 @@ namespace CubeMesh
 	};
 
 	const std::array<Vertex, 4> FrontVertices = {
-		Vertex({ -0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f }),
-		Vertex({ -0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f }),
-		Vertex({  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f }),
-		Vertex({  0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f })
+		Vertex({ -0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f }, 1),
+		Vertex({ -0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f }, 1),
+		Vertex({  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f }, 1),
+		Vertex({  0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f }, 1)
 	};
 
 	const std::array<Vertex, 4> BackVertices = {
-		Vertex({  0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f }),
-		Vertex({  0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f }),
-		Vertex({ -0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f }),
-		Vertex({ -0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f })
+		Vertex({  0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f }, 0),
+		Vertex({  0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f }, 0),
+		Vertex({ -0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f }, 0),
+		Vertex({ -0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f }, 0)
 	};
 
 	const std::array<Vertex, 4> TopVertices = {
-		Vertex({ -0.5f,  0.5f,  0.5f }, { 0.0f, 0.0f }),
-		Vertex({ -0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f }),
-		Vertex({  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f }),
-		Vertex({  0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f })
+		Vertex({ -0.5f,  0.5f,  0.5f }, { 0.0f, 0.0f }, 0),
+		Vertex({ -0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f }, 0),
+		Vertex({  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f }, 0),
+		Vertex({  0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f }, 0)
 	};
 
 	const std::array<Vertex, 4> BottomVertices = {
-		Vertex({ -0.5f,  0.5f,  0.5f }, { 0.0f, 0.0f }),
-		Vertex({ -0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f }),
-		Vertex({  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f }),
-		Vertex({  0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f })
+		Vertex({ -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f }, 0),
+		Vertex({ -0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f }, 0),
+		Vertex({  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f }, 0),
+		Vertex({  0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f }, 0)
 	};
 
 	const std::array<Vertex, 4> RightVertices = {
-		Vertex({  0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f }),
-		Vertex({  0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f }),
-		Vertex({  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f }),
-		Vertex({  0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f })
+		Vertex({  0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f }, 0),
+		Vertex({  0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f }, 0),
+		Vertex({  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f }, 0),
+		Vertex({  0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f }, 0)
 	};
 
 	const std::array<Vertex, 4> LeftVertices = {
-		Vertex({ -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f }),
-		Vertex({ -0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f }),
-		Vertex({ -0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f }),
-		Vertex({ -0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f })
+		Vertex({ -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f }, 0),
+		Vertex({ -0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f }, 0),
+		Vertex({ -0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f }, 0),
+		Vertex({ -0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f }, 0)
 	};
 }
