@@ -1,90 +1,120 @@
 #include "Application.h"
-#include "../Utilities/Logging.h"
-//#include "../Voxel/Cube.h"
-#include "stm/matrix_transform.h"
-#include "../Renderer/OpenGL/OpenGLCallback.h"
-#include "../Game/Player.h"
-#include "../Game/World.h"
 
 #include <thread>
 #include <chrono>
 
-//Renderer Application::renderer;
-static World world;
-
-Application::Application(uint32_t width, uint32_t height, const char* title)
-	:_window(new Window(width, height, title))
-{}
+Application::Application(uint32_t width, uint32_t height, const char* title, std::unique_ptr<Renderer> renderer)
+	:_window(std::make_unique<Window>(width, height, title)), _running(true), _renderer(std::move(renderer))
+{
+	_window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+}
 
 void Application::Init()
 {
-	Log::Init();
-	
-	std::shared_ptr<Shader> shader = std::make_shared<Shader>();
-	shader->AttachShader("assets/shaders/basic_vertex_shader.shader");
-	shader->AttachShader("assets/shaders/basic_fragment_shader.shader");
-	renderer.BindShader(shader);
-
-	/*this->renderer.Push(Mesh({
-		Vertex({-0.5f, -0.5f, 1.0f }, { 0.0f, 0.0f}),
-		Vertex({-0.5f,  0.5f, 1.0f }, { 0.0f, 1.0f}),
-		Vertex({ 0.5f,  0.5f, 1.0f }, { 1.0f, 1.0f}),
-		Vertex({ 0.5f, -0.5f, 1.0f }, { 1.0f, 0.0f}) }
-		, {
-			2, 1, 0,
-			3, 2, 0
-		},
-		{ "assets/textures/box.png" })); */
-
 }
-
-void Application::Close() const {}
 
 void Application::Run()
-{ 
-	static Player global_player;
-	SetPlayer(&global_player);
-	global_player.GetCamera().UpdateProj(45.0f, (float)_window->GetWidth() / (float)_window->GetHeight());
-
-	auto model = stm::translate({ 0.0f });
-	const auto& view = global_player.GetCamera().CurrentView();
-	const auto& proj = global_player.GetCamera().CurrentProjection();
-
-	auto& shader = *renderer.GetBoundShader();
-
-	_window->Clear();
-
-	shader.Bind();
-
-	shader.SetUniform4f("u_color", { 0.1f, 0.6f, 0.3f , 1.0f});
-	
-	shader.SetUniformMat4f("u_view", view);
-	shader.SetUniformMat4f("u_projection", proj);
-	shader.SetUniform1i("u_texture", 0);
-
-	shader.Bind();
-	/*for (unsigned int i = 0; i < 10; ++i)
+{
+	while (!ShouldClose())
 	{
-		auto temp = i;
-		model = stm::translate({ (float)temp, (float)temp, (float)temp});
-		shader.SetUniformMat4f("u_model", model);
-		renderer.Draw();
-	}*/
-	shader.SetUniformMat4f("u_model", model);
-
-	renderer.RenderWorld(world);
-	
-	
-	_window->ProcessEvents();
-
-	using namespace std::chrono_literals;
-	std::this_thread::sleep_for(10ms);
-	//_window->Run(); 
+		Process();
+		HandleEvents();
+		using namespace std::chrono_literals;
+		std::this_thread::sleep_for(10ms);
+	}
 }
 
-bool Application::ShouldClose() const { return _window->ShouldClose(); }
+void Application::Process()
+{ 
+}
+
+void Application::Close()
+{
+	_window->WindowClose();
+	_running = false;
+}
+
+bool Application::ShouldClose() const
+{
+	return _window->ShouldClose() || !_running;
+}
+
+void Application::OnEvent(std::shared_ptr<Event> event)
+{
+	if (!event->_handled)
+		_unhandledEvents.push(event);
+}
+
+void Application::HandleEvents()
+{
+	std::queue<std::shared_ptr<Event>> missingEvents;
+
+	for (uint32_t i = 0; i < _unhandledEvents.size(); ++i)
+	{
+		auto event = _unhandledEvents.front();
+		_unhandledEvents.pop();
+
+		EventDispatcher dispatcher(*event.get());
+
+		dispatcher.Dispatch<WindowCloseEvent >(std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
+		dispatcher.Dispatch<WindowResizeEvent>(std::bind(&Application::OnWindowResize, this, std::placeholders::_1));
+		dispatcher.Dispatch<MouseMovedEvent  >(std::bind(&Application::OnMouseMoved, this, std::placeholders::_1));
+		dispatcher.Dispatch<KeyPressedEvent  >(std::bind(&Application::OnKeyPressed, this, std::placeholders::_1));
+		dispatcher.Dispatch<KeyReleasedEvent >(std::bind(&Application::OnKeyReleased, this, std::placeholders::_1));
+		dispatcher.Dispatch<KeyRepeatEvent   >(std::bind(&Application::OnKeyRepeat, this, std::placeholders::_1));
+
+		if (!event->_handled)
+		{
+			missingEvents.push(event);
+			//LOG_WARN("Not Handled: " + event->ToString());
+		}
+		else
+		{
+			//LOG_INFO("Handled: " + event->ToString());
+		}
+	}
+
+	for (uint32_t i = 0; i < _unhandledEvents.size(); ++i)
+	{
+		missingEvents.push(_unhandledEvents.front());
+		_unhandledEvents.pop();
+	}
+
+	_unhandledEvents.swap(missingEvents);
+}
+
+bool Application::OnWindowClose(WindowCloseEvent& event)
+{
+	Close();
+	return true;
+}
+
+bool Application::OnWindowResize(WindowResizeEvent& event)
+{
+	_window->WindowResize(event.GetWidth(), event.GetHeight());
+	return true;
+}
+
+bool Application::OnMouseMoved(MouseMovedEvent& event)
+{
+	return true;
+}
+
+bool Application::OnKeyPressed(KeyPressedEvent& event)
+{
+	return true;
+}
+
+bool Application::OnKeyReleased(KeyReleasedEvent& event)
+{
+	return true;
+}
+
+bool Application::OnKeyRepeat(KeyRepeatEvent& event)
+{
+	return true;
+}
 
 Application::~Application()
 {
-	delete _window;
 }

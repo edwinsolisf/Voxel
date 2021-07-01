@@ -1,18 +1,12 @@
-#include "Application/Application.h"
+#include "Game/Voxel.h"
 
 int main(int argc, char** argv)
 {
-	const int width = 1600, height = 900;
-	const char* title = "Voxel";
-	
-	Application* game = new Application(width, height, title);
+	VoxelGame* game = new VoxelGame();
 
 	game->Init();
 
-	while (!game->ShouldClose())
-	{
-		game->Run();
-	}
+	game->Run();
 
 	game->Close();
 

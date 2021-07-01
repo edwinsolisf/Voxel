@@ -1,26 +1,36 @@
 #pragma once
 
 #include "OpenGLCore.h"
+#include "../CoreWindow.h"
 
-class OpenGLWindow
+class OpenGLWindow : public CoreWindow
 {
 public:
 	OpenGLWindow(uint32_t width, uint32_t height, const char* title);
 	~OpenGLWindow();
+	
+	WindowType GetWindowType() const override { return GetStaticType(); }
+	
+	void SetEventCallback(const std::function<void(std::shared_ptr<Event>)>& eventCallbackFunction) override
+	{ _windowData.eventCallbackFunction = eventCallbackFunction; }
 
-	uint32_t GetWidth() const { return _width; }
-	uint32_t GetHeight() const { return _height; }
-	const char* GetTitle() const { return _title; }
+	bool ShouldClose() const override;
+	void WindowClose() override;
+	void WindowInfo() const override;
+	void WindowResize(uint32_t width, uint32_t height) override;
+	void WindowClear() override;
 
-	bool ShouldClose() const;
-	//void Run() const;
-	void Clear() const;
 	void ProcessEvents() const;
+	static WindowType GetStaticType() { return WindowType::OPENGL_WINDOW; }
+
+	struct OpenGLWindowData
+	{
+		uint32_t width, height;
+		std::function<void(std::shared_ptr<Event>)> eventCallbackFunction;
+	};
 
 private:
-	uint32_t	_width;
-	uint32_t	_height;
-	const char* _title;
+	GLFWwindow*		 _window;
+	OpenGLWindowData _windowData;
 
-	GLFWwindow* _window;
 };

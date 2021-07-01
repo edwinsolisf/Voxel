@@ -2,7 +2,7 @@
 
 #include "stm/simplex_noise.h"
 
-const uint32_t smallWorldSize = 8;
+const uint32_t smallWorldSize = 4;
 
 World::World()
 {
@@ -14,7 +14,10 @@ World::World()
 	for (uint32_t i = 0; i < smallWorldSize; ++i)
 	{
 		for (uint32_t j = 0; j < smallWorldSize; ++j)
-			WorldGenerator(stm::vec3i(i, 0, j));
+		{
+			for(uint32_t k = 0; k < smallWorldSize; ++k)
+			WorldGenerator(stm::vec3i(i, k, j));
+		}
 	}
 }
 
@@ -39,7 +42,8 @@ void World::WorldGenerator(const stm::vec3i& pos)
 			{
 				BlockId type = BlockId::AIR;
 				int seed = rand();
-				if (generator.Noise({ (float)(i + pos.x * Chunk::size)/10.f, (float)(k + pos.y * Chunk::size)/10.f, (float)(j + pos.z * Chunk::size)/10.f }) > 0.0f)
+				float scale = 16.0f;
+				if (generator.Noise({ (float)(i + (pos.x * Chunk::size))/scale, (float)(k + (pos.y * Chunk::size)) / scale, (float)(j + (pos.z * Chunk::size)) / scale}) > 0.0f)
 				{
 					switch (seed % 4)
 					{

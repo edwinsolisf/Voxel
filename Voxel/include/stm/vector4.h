@@ -43,7 +43,7 @@ namespace stm
 		{
 		}
 
-		vector(const _TYPE& _x, const _TYPE& _y, const _TYPE& _z, const _TYPE& _w)
+		constexpr vector(const _TYPE& _x, const _TYPE& _y, const _TYPE& _z, const _TYPE& _w)
 			:x(_x), y(_y), z(_z), w(_w)
 		{
 		}

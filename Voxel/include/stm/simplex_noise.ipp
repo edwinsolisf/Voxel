@@ -28,7 +28,7 @@ namespace stm
 
 	template<uint32_t dimensions>
 	simplex_noise<dimensions>::simplex_noise(uint32_t seed, float discontinuity_factor, bool fast_floor,
-								 std::function<stm::dynamic_vector<float>(int32_t, uint32_t, std::function<uint32_t(uint32_t)>)> 
+								 std::function<stm::vector<float, dimensions>(int32_t, std::function<uint32_t(uint32_t)>)> 
 								 gradient_generator_function,
 								 std::function<float(float)> normalize_function)
 		:_seed(seed), _discontinuity_factor(discontinuity_factor), _floor(default_floor), _hash(default_hash), 
@@ -139,12 +139,7 @@ namespace stm
 	template<uint32_t dimensions>
 	float simplex_noise<dimensions>::GradientDotProduct(int32_t permutation, const stm::vector<float, dimensions> vertex) const
 	{
-		if (dimensions > 2)
-		{
-			auto gradient = _gradient_generator(permutation, dimensions, _hash);
-			return vertex.DotProduct(gradient);
-		}
-		stm::vector<float, dimensions> gradient(_gradient_generator(permutation, 3, _hash).GetData());
+		auto gradient = _gradient_generator(permutation, _hash);
 		return vertex.DotProduct(gradient);
 	}
 
@@ -216,21 +211,38 @@ namespace stm
 	}
 
 	template<uint32_t dimensions>
-	stm::dynamic_vector<float> simplex_noise<dimensions>::default_gradient_generator(int32_t original, uint32_t dim,
-		std::function<uint32_t(uint32_t)> hash)
+	stm::vector<float, dimensions> simplex_noise<dimensions>::default_gradient_generator(int32_t original, std::function<uint32_t(uint32_t)> hash)
 	{
-
-		stm::dynamic_vector<float> out(dim);
-		int32_t signs = hash(original) & ((int32_t)::pow(2, dim) - 1);
-		int32_t zeroPivot = GetEdgeDirection(original, dim, hash);
-		for (uint32_t i = 0; i < dim; ++i)
+		stm::vector<float, dimensions> out;
+		if (dimensions > 2)
 		{
-			if (i == zeroPivot)
+			int32_t signs = hash(original) & ((int32_t)::pow(2, dimensions) - 1);
+			int32_t zeroPivot = GetEdgeDirection(original, dimensions, hash);
+			for (uint32_t i = 0; i < dimensions; ++i)
 			{
-				out[i] = 0.f;
-				continue;
+				if (i == zeroPivot)
+				{
+					out[i] = 0.f;
+					continue;
+				}
+				out[i] = (GetSignDirection(signs, i) ? -1.0f : 1.0f);
 			}
-			out[i] = (GetSignDirection(signs, i) ? -1.0f : 1.0f);
+		}
+		else
+		{
+			stm::vector<float, 3> temp;
+			int32_t signs = hash(original) & ((int32_t)::pow(2, 3) - 1);
+			int32_t zeroPivot = GetEdgeDirection(original, 3, hash);
+			for (uint32_t i = 0; i < 3; ++i)
+			{
+				if (i == zeroPivot)
+				{
+					temp[i] = 0.f;
+					continue;
+				}
+				temp[i] = (GetSignDirection(signs, i) ? -1.0f : 1.0f);
+			}
+			out = temp.ToVector<dimensions>();
 		}
 		return out;
 	}

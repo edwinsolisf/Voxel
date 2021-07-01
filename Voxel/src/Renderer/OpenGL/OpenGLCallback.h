@@ -1,13 +1,8 @@
 #pragma once
 
 #include "OpenGLCore.h"
-#include "../../Game/Player.h"
-#include "stm/matrix_transform.h"
 
-void SetPlayer(Player*);
-
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-
-void movement(GLFWwindow* window);
+void OpenGLKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void OpenGLMouseMoveCallback(GLFWwindow* window, double xpos, double ypos);
+void OpenGLWindowResizeCallback(GLFWwindow* window, int width, int height);
+void OpenGLWindowCloseCallback(GLFWwindow* window);

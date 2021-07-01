@@ -1,68 +1,48 @@
 #include "OpenGLCallback.h"
 
-static bool keys[1024];
-static bool firstMouse = true;
-static double lastX, lastY;
-static float sensitivity = 0.005f;
-static float step = 0.1f;
+#include "OpenGLWindow.h"
+#include "../../EventSystem/WindowEvent.h"
+#include "../../EventSystem/MouseEvent.h"
+#include "../../EventSystem/KeyEvent.h"
 
-static Player* player;
-void SetPlayer(Player* g_Player)
+void OpenGLKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    player = g_Player;
+	OpenGLWindow::OpenGLWindowData& data = *static_cast<OpenGLWindow::OpenGLWindowData*>(glfwGetWindowUserPointer(window));
+
+	switch (action)
+	{
+	case GLFW_PRESS:
+		data.eventCallbackFunction(std::make_shared<KeyPressedEvent>((KeyCode)key));
+		break;
+
+	case GLFW_RELEASE:
+		data.eventCallbackFunction(std::make_shared<KeyReleasedEvent>((KeyCode)key));
+		break;
+
+	case GLFW_REPEAT:
+		data.eventCallbackFunction(std::make_shared<KeyRepeatEvent>((KeyCode)key));
+		break;
+	}
 }
 
-void movement(GLFWwindow* window)
+void OpenGLMouseMoveCallback(GLFWwindow* window, double xpos, double ypos)
 {
-    if (keys[GLFW_KEY_ESCAPE])
-        glfwSetWindowShouldClose(window, GL_TRUE);
-    if (keys[GLFW_KEY_W])
-        player->MoveForward(step);
-    if (keys[GLFW_KEY_S])
-        player->MoveForward(-step);
-    if (keys[GLFW_KEY_A])
-        player->MoveRight(-step);
-    if (keys[GLFW_KEY_D])
-        player->MoveRight(step);
-    if (keys[GLFW_KEY_SPACE])
-        player->MoveUp(step);
-    if (keys[GLFW_KEY_LEFT_SHIFT])
-        player->MoveUp(-step);
-    if (keys[GLFW_KEY_UP])
-        player->RotatePitch(step);
-    if (keys[GLFW_KEY_DOWN])
-        player->RotatePitch(-step);
-    if (keys[GLFW_KEY_LEFT])
-        player->RotateYaw(step);
-    if (keys[GLFW_KEY_RIGHT])
-        player->RotateYaw(-step);
-    if (keys[GLFW_KEY_Q])
-        player->RotateRoll(-step);
-    if (keys[GLFW_KEY_E])
-        player->RotateRoll(step);
+	OpenGLWindow::OpenGLWindowData& data = *static_cast<OpenGLWindow::OpenGLWindowData*>(glfwGetWindowUserPointer(window));
+
+	data.eventCallbackFunction(std::make_shared<MouseMovedEvent>(xpos, ypos));
 }
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+void OpenGLWindowResizeCallback(GLFWwindow* window, int width, int height)
 {
-    if (firstMouse)
-    {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
+	OpenGLWindow::OpenGLWindowData& data = *static_cast<OpenGLWindow::OpenGLWindowData*>(glfwGetWindowUserPointer(window));
+	data.width = width;
+	data.height = height;
 
-    float xoffset = lastX - xpos, yoffset = lastY - ypos;
-    lastX = xpos;
-    lastY = ypos;
-
-    player->RotatePitch(yoffset * sensitivity);
-    player->RotateYaw(xoffset * sensitivity);
+	data.eventCallbackFunction(std::make_shared<WindowResizeEvent>(width, height));
 }
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
+void OpenGLWindowCloseCallback(GLFWwindow* window)
 {
-    if (action == GLFW_PRESS)
-        keys[key] = true;
-    else if (action == GLFW_RELEASE)
-        keys[key] = false;
+	OpenGLWindow::OpenGLWindowData& data = *static_cast<OpenGLWindow::OpenGLWindowData*>(glfwGetWindowUserPointer(window));
+	data.eventCallbackFunction(std::make_shared<WindowCloseEvent>());
 }

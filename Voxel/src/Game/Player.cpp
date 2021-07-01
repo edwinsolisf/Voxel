@@ -6,7 +6,19 @@ static const auto& worldY = stm::posY;
 
 Player::Player()
 	:Entity(), _position(), _direction(stm::posZ), _normal(stm::posY), _freeMovement(false), _camera(45.0f, 16.0f/9.0f)
-{}
+{
+}
+
+void Player::Move(float deltaTime)
+{
+	MoveForward(deltaTime * _speed.z);
+	MoveUp(deltaTime * _speed.y);
+	MoveRight(deltaTime * _speed.x);
+
+	RotateYaw(deltaTime * _rotation.x);
+	RotatePitch(deltaTime * _rotation.y);
+	RotateRoll(deltaTime * _rotation.z);
+}
 
 void Player::MoveForward(float step)
 {
@@ -42,7 +54,6 @@ void Player::MoveUp(float step)
 
 void Player::RotatePitch(float angle)
 {
-	
 	if (!_freeMovement)
 	{
 		float currentAngle = stm::angle(_direction, worldY);

@@ -38,7 +38,7 @@ namespace stm
 			memcpy(_data, data, 2 * sizeof(_TYPE));
 		}
 
-		vector(const _TYPE& _x, const _TYPE& _y)
+		constexpr vector(const _TYPE& _x, const _TYPE& _y)
 			:x(_x), y(_y)
 		{
 		}

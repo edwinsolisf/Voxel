@@ -39,15 +39,29 @@ static const char* GLError(int error)
     }
 }
 
+static bool InitializedGLFW = false;
+static bool InitializedGLEW = false;
+
+static bool InitializeGLFW()
+{
+    return (glfwInit() == GLFW_TRUE);
+}
+
+static bool InitializeGLEW()
+{
+    return (glewInit() == GLEW_OK);
+}
+
 static void GLClearError()
 {
-    while (glGetError() != GL_NO_ERROR);
+    while ((glGetError() != GL_NO_ERROR) && InitializedGLEW && InitializedGLFW);
 }
 
 static bool GLCheckError(const char* function, const char* file, int line)
 {
     bool state = false;
-    while (GLenum error = glGetError())
+    GLenum error = glGetError();
+    while (error && InitializedGLEW && InitializedGLFW)
     {
         state = true;
         std::cout << "[OPENGL ERROR](function: " << function << ", file: " << file << ", " << ", line: " << line << "): " << GLError(error) << std::endl;

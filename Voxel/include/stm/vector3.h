@@ -40,7 +40,7 @@ namespace stm
 			memcpy(_data, data, 3 * sizeof(_TYPE));
 		}
 
-		vector(const _TYPE& _x, const _TYPE& _y, const _TYPE& _z)
+		constexpr vector(const _TYPE& _x, const _TYPE& _y, const _TYPE& _z)
 			:x(_x), y(_y), z(_z)
 		{
 		}
