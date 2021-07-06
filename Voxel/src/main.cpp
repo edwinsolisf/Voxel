@@ -1,8 +1,10 @@
 #include "Game/Voxel.h"
+#include <Windows.h>
 
 int main(int argc, char** argv)
 {
-	VoxelGame* game = new VoxelGame();
+	ApplicationCommandArgs args = { argc, argv };
+	VoxelGame* game = new VoxelGame(args);
 
 	game->Init();
 

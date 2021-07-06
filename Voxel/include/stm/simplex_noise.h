@@ -19,7 +19,7 @@ namespace stm
 					  std::function<uint32_t(uint32_t)> hash_function = default_hash,
 					  std::function<float(float)> normalize_function = default_normalizer);
 		simplex_noise(uint32_t seed, float discontinuity_factor = 0.6f, bool fast_floor = true, 
-					  std::function<stm::vector<float, dimensions>(int32_t, std::function<uint32_t(uint32_t)>)> 
+					  std::function<stm::dynamic_vector<float>(int32_t, uint32_t, std::function<uint32_t(uint32_t)>)> 
 					  gradient_generator_function = default_gradient_generator,
 					  std::function<float(float)> normalize_function = default_normalizer);
 
@@ -32,7 +32,7 @@ namespace stm
 		std::function<float(float)> _floor;
 		std::function<uint32_t(uint32_t)> _hash;
 		std::function<float(float)> _normalize_scale;
-		std::function<stm::vector<float, dimensions>(int32_t, std::function<uint32_t(uint32_t)>)> _gradient_generator;
+		std::function<stm::dynamic_vector<float>(int32_t, uint32_t, std::function<uint32_t(uint32_t)>)> _gradient_generator;
 		stm::dynamic_vector<uint32_t> _permutations;
 
 		static stm::dynamic_vector<uint32_t> GenRandomPermutations(uint32_t size);
@@ -41,7 +41,8 @@ namespace stm
 		static float default_floor(float);
 		static uint32_t default_hash(uint32_t);
 		static float default_normalizer(float discontinuity_factor);
-		static stm::vector<float, dimensions> default_gradient_generator(int32_t, std::function<uint32_t(uint32_t)> hash = default_hash);
+		static stm::dynamic_vector<float> default_gradient_generator(int32_t, uint32_t, 
+																	 std::function<uint32_t(uint32_t)> hash = default_hash);
 
 		stm::vector<uint32_t, dimensions> GetVertexIndicesOrder(const stm::vector<float, dimensions>& internal_coordinates) const;
 		float GetVertexNoiseValue(const stm::vector<float, dimensions>& vertex, float discontinuity_factor,

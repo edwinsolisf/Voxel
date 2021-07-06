@@ -31,6 +31,9 @@ public:
 	void Bind(uint32_t slot = 0) const;
 	void Unbind() const;
 
+	uint32_t GetWidth() const { return _width; }
+	uint32_t GetHeight() const { return _height; }
+
 private:
 	uint32_t _id;
 	int32_t _width;

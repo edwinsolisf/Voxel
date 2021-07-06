@@ -3,9 +3,11 @@
 #include <thread>
 #include <chrono>
 
-Application::Application(uint32_t width, uint32_t height, const char* title, std::unique_ptr<Renderer> renderer)
-	:_window(std::make_unique<Window>(width, height, title)), _running(true), _renderer(std::move(renderer))
+Application::Application(uint32_t width, uint32_t height, const char* title, ApplicationCommandArgs cmdArgs,
+	std::unique_ptr<Renderer> renderer)
+	:_window(std::make_unique<Window>(width, height, title)), _running(true), _renderer(std::move(renderer)), _eventRecycling(true)
 {
+	ParseCommandLineArgs(cmdArgs);
 	_window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 }
 
@@ -17,14 +19,20 @@ void Application::Run()
 {
 	while (!ShouldClose())
 	{
-		Process();
+		float lastFrame = _window->GetLastFrameTime();
+		float timeStep = _window->GetCurrentFrameTime() - lastFrame;
+		OnUpdate(timeStep);
+		for (auto layer : _layerStack)
+			layer->OnUpdate();
+
 		HandleEvents();
+		_window->OnUpdate();
 		using namespace std::chrono_literals;
 		std::this_thread::sleep_for(10ms);
 	}
 }
 
-void Application::Process()
+void Application::OnUpdate(float timeStep)
 { 
 }
 
@@ -63,6 +71,13 @@ void Application::HandleEvents()
 		dispatcher.Dispatch<KeyReleasedEvent >(std::bind(&Application::OnKeyReleased, this, std::placeholders::_1));
 		dispatcher.Dispatch<KeyRepeatEvent   >(std::bind(&Application::OnKeyRepeat, this, std::placeholders::_1));
 
+		for (auto it = _layerStack.end(); it != _layerStack.begin();)
+		{
+			(*--it)->OnEvent(event);
+			if (event->_handled)
+				break;
+		}
+
 		if (!event->_handled)
 		{
 			missingEvents.push(event);
@@ -80,7 +95,8 @@ void Application::HandleEvents()
 		_unhandledEvents.pop();
 	}
 
-	_unhandledEvents.swap(missingEvents);
+	if (_eventRecycling)
+		_unhandledEvents.swap(missingEvents);
 }
 
 bool Application::OnWindowClose(WindowCloseEvent& event)
@@ -113,6 +129,18 @@ bool Application::OnKeyReleased(KeyReleasedEvent& event)
 bool Application::OnKeyRepeat(KeyRepeatEvent& event)
 {
 	return true;
+}
+
+void Application::ParseCommandLineArgs(ApplicationCommandArgs cmdArgs)
+{
+	for (int i = 0; i < cmdArgs.argc; ++i)
+	{
+		if (i == 0)
+		{
+			_workingDirectory = std::string((const char*)cmdArgs.argv[i]);
+			std::cout << _workingDirectory << std::endl;
+		}
+	}
 }
 
 Application::~Application()

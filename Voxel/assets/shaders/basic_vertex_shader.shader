@@ -10,7 +10,7 @@ uniform mat4 u_view;
 uniform mat4 u_projection;
 
 out vec2 texCoords;
-out float textureId;
+flat out float textureId;
 
 void main()
 {

@@ -166,6 +166,10 @@ int32_t OpenGLShaderProgram::GetUniformLocation(const std::string& uniform) cons
 	
 	GLCALL(int32_t location = glGetUniformLocation(_id, uniform.c_str()));
 	_uniformLocationCache[uniform] = location;
+
+	if (location == -1)
+		LOG_WARN(uniform + " not found");
+
 	return location;
 }
 

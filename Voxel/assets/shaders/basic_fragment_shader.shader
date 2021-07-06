@@ -2,7 +2,7 @@
 #version 330 core
 
 in vec2 texCoords;
-in flat float textureId;
+flat in float textureId;
 
 out vec4 color;
 

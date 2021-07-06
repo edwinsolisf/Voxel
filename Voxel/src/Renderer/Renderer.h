@@ -12,7 +12,8 @@ public:
 	void Push(const Mesh& mesh) { _queue.push_back(mesh); }
 	void Clear() { _queue.clear(); }
 	virtual void Draw() const;
-	void BindShader(std::shared_ptr<Shader> shader) { _boundShader = shader; }
+	virtual void DrawQuad(std::shared_ptr<VertexBuffer>, std::shared_ptr<IndexBuffer>, std::shared_ptr<Texture>, const stm::mat4f& transform) const;
+	void BindShader(std::shared_ptr<Shader> shader) { _boundShader = shader; _boundShader->Bind(); }
 	auto GetBoundShader() const { return _boundShader; }
 
 private:

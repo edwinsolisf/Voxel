@@ -12,15 +12,16 @@ public:
 	WindowType GetWindowType() const override { return GetStaticType(); }
 	
 	void SetEventCallback(const std::function<void(std::shared_ptr<Event>)>& eventCallbackFunction) override
-	{ _windowData.eventCallbackFunction = eventCallbackFunction; }
+		{ _windowData.eventCallbackFunction = eventCallbackFunction; }
 
 	bool ShouldClose() const override;
 	void WindowClose() override;
 	void WindowInfo() const override;
 	void WindowResize(uint32_t width, uint32_t height) override;
 	void WindowClear() override;
+	void OnUpdate() override;
+	float GetCurrentFrameTime() override;
 
-	void ProcessEvents() const;
 	static WindowType GetStaticType() { return WindowType::OPENGL_WINDOW; }
 
 	struct OpenGLWindowData

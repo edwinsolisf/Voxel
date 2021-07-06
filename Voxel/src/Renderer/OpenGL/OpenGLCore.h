@@ -1,11 +1,6 @@
 #pragma once
 
-#include <iostream>
-
-#define GLEW_STATIC
-#include "GL/glew.h"
-
-#include "GLFW/glfw3.h"
+#include "OpenGLPlatform.h"
 
 #include "../../Utilities/Logging.h"
 
@@ -49,7 +44,11 @@ static bool InitializeGLFW()
 
 static bool InitializeGLEW()
 {
+#ifdef PLATFORM_WINDOWS
     return (glewInit() == GLEW_OK);
+#elif PLATFORM_MACOS
+    return true;
+#endif
 }
 
 static void GLClearError()
@@ -64,7 +63,8 @@ static bool GLCheckError(const char* function, const char* file, int line)
     while (error && InitializedGLEW && InitializedGLFW)
     {
         state = true;
-        std::cout << "[OPENGL ERROR](function: " << function << ", file: " << file << ", " << ", line: " << line << "): " << GLError(error) << std::endl;
+        LOG_ERROR(std::string("[OPENGL ERROR](function: ") + function + ", file: " + file + ", " + ", line: " + 
+                  std::to_string(line) + "): " + GLError(error));
     }
     return state;
 }

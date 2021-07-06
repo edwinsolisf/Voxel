@@ -9,15 +9,24 @@
 #include "../EventSystem/KeyEvent.h"
 
 #include "../Renderer/Renderer.h"
+#include "../Renderer/Layer.h"
+
+struct ApplicationCommandArgs
+{
+	uint32_t argc;
+	char** argv;
+};
 
 class Application
 {
 public:
-	Application(uint32_t width, uint32_t height, const char* title, std::unique_ptr<Renderer> renderer = nullptr);
+	Application(uint32_t width, uint32_t height, const char* title, ApplicationCommandArgs cmdArgs,
+		std::unique_ptr<Renderer> renderer = nullptr);
 	virtual ~Application();
 
 	virtual void Init();
-	virtual void Process();
+	virtual void OnUpdate(float timeStep);
+
 	void Run();
 	void Close();
 	bool ShouldClose() const;
@@ -26,8 +35,10 @@ public:
 	void OnEvent(std::shared_ptr<Event> event);
 
 protected:
+	LayerStack _layerStack;
 	std::unique_ptr<Window>	_window;
 	std::unique_ptr<Renderer> _renderer;
+	std::string _workingDirectory;
 
 	virtual bool OnWindowClose(WindowCloseEvent& event);
 	virtual bool OnWindowResize(WindowResizeEvent& event);
@@ -35,8 +46,12 @@ protected:
 	virtual bool OnKeyPressed(KeyPressedEvent& event);
 	virtual bool OnKeyReleased(KeyReleasedEvent& event);
 	virtual bool OnKeyRepeat(KeyRepeatEvent& event);
+	virtual void ParseCommandLineArgs(ApplicationCommandArgs cmdArgs);
+
+	void EnableEventRecycling() { _eventRecycling = true; }
 
 private:
 	bool _running;
+	bool _eventRecycling;
 	std::queue<std::shared_ptr<Event>> _unhandledEvents;
 };

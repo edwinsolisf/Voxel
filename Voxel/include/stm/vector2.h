@@ -28,14 +28,14 @@ namespace stm
 		};
 
 		//Constructors
-		vector()
+		constexpr vector()
+			:x(0), y(0)
 		{
-			memset(_data, 0, 2 * sizeof(_TYPE));
 		}
 
-		vector(const _TYPE data[2])
+		constexpr vector(const _TYPE data[2])
+			:x(data[0]), y(data[1])
 		{
-			memcpy(_data, data, 2 * sizeof(_TYPE));
 		}
 
 		constexpr vector(const _TYPE& _x, const _TYPE& _y)
@@ -43,14 +43,14 @@ namespace stm
 		{
 		}
 
-		vector(const _TYPE& value)
+		constexpr vector(const _TYPE& value)
 			:x(value), y(value)
 		{
 		}
 
 		vector(const vector& other)
+			:x(other.x), y(other.y)
 		{
-			memcpy(_data, other._data, 2 * sizeof(_TYPE));
 		}
 
 		//Assigment Operator

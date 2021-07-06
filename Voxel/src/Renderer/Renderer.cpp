@@ -19,3 +19,14 @@ void Renderer::Draw() const
 		OpenGLDraw(mesh.GetVertexCount());
 	}
 }
+
+void Renderer::DrawQuad(std::shared_ptr<VertexBuffer> vbo, std::shared_ptr<IndexBuffer> ibo, std::shared_ptr<Texture> texture,
+	const stm::mat4f& transform) const
+{
+	vbo->Bind();
+	ibo->Bind();
+	texture->Bind(0);
+	_boundShader->SetUniform1i("u_texture", 0);
+	_boundShader->SetUniformMat4f("u_view", transform);
+	OpenGLDraw(ibo->GetIndexCount());
+}

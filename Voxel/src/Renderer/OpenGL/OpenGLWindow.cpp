@@ -39,6 +39,8 @@ OpenGLWindow::OpenGLWindow(uint32_t width, uint32_t height, const char* title)
 	glfwSetCursorPosCallback(_window, OpenGLMouseMoveCallback);
 	glfwSetWindowSizeCallback(_window, OpenGLWindowResizeCallback);
 	glfwSetWindowCloseCallback(_window, OpenGLWindowCloseCallback);
+	
+	_lastFrame = glfwGetTime();
 }
 
 bool OpenGLWindow::ShouldClose() const
@@ -84,14 +86,22 @@ void OpenGLWindow::WindowResize(uint32_t width, uint32_t height)
 
 void OpenGLWindow::WindowClear()
 {
-	GLCALL(glEnable(GL_CULL_FACE));
-	GLCALL(glCullFace(GL_FRONT));
+	//GLCALL(glEnable(GL_CULL_FACE));
+	//GLCALL(glCullFace(GL_FRONT));
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	GLCALL(glEnable(GL_DEPTH_TEST));
 	GLCALL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	GLCALL(glClearColor(0.3f, 0.4f, 0.8f, 1.0f));
 }
 
-void OpenGLWindow::ProcessEvents() const
+float OpenGLWindow::GetCurrentFrameTime()
+{
+	_lastFrame = glfwGetTime();
+	return _lastFrame;
+}
+
+void OpenGLWindow::OnUpdate()
 {
 	GLCALL(glfwSwapBuffers(_window));
 	GLCALL(glfwPollEvents());
