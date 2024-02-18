@@ -47,8 +47,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install opengl
-      run: sudo apt install freeglut3-dev
+    - name: Install dependencies
+      run: sudo apt install libgl-dev libglfw3-dev libglew-dev
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
