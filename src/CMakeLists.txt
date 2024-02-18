@@ -8,7 +8,7 @@ target_sources(Engine PRIVATE
                 Renderer/PerspectiveCamera.cpp
                 Renderer/Renderer.cpp
                 Renderer/Vertex.cpp
-                Renderer/OpenGL/OpenGLCallBack.cpp
+                Renderer/OpenGL/OpenGLCallback.cpp
                 Renderer/OpenGL/OpenGLIndexBuffer.cpp
                 Renderer/OpenGL/OpenGLShader.cpp
                 Renderer/OpenGL/OpenGLTexture.cpp
